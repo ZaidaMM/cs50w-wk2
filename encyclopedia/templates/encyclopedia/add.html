@@ -1,0 +1,31 @@
+{% extends "encyclopedia/layout.html" %} {% block title %} Add New Entry
+{%endblock %} {% block body %}
+<h1>Add New Entry Page</h1>
+<div class="row">
+  <div class="col-lg-10 col-md-9">
+    <form>
+      {% csrf_token %}
+      <div class="col">
+        <label for="entry_content" class="form-label">Encyclopedia Title</label>
+      </div>
+      <div class="col-auto mb-2">
+        <input class="form-control" name="q" type="text" />
+      </div>
+      <div class="col-auto">
+        <label for="entry_content" class="form-label"
+          >Encyclopedia Content</label
+        >
+        <textarea
+          name="entry_content"
+          id="entry_content"
+          class="form-control mb-4"
+          rows="10"
+        ></textarea>
+      </div>
+      <div class="col-auto">
+        <input type="submit" />
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

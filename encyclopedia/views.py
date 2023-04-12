@@ -45,3 +45,6 @@ def search(request):
             return render(request, 'encyclopedia/search.html', {
                 "results": results
             })
+        
+def add(request):
+    return render(request, "encyclopedia/add.html")
