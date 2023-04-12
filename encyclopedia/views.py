@@ -28,9 +28,20 @@ def entry(request, title):
         })
 
 def search(request):
-    query = request.POST['q']
-    entry = md_to_html_converter(query)
-    if query is not None:
-        return render(request, 'encyclopedia/entry.html', {"title":query,  "content":entry} )
-    else:
-        return render(request, 'encyclopedia/search.html')
+    if request.method == "POST":
+        query = request.POST['q']
+        entry = md_to_html_converter(query)
+        if entry is not None:
+            return render(request, 'encyclopedia/entry.html', {
+                "title":query, 
+                "content":entry
+            })
+        else:
+            entries_list = util.list_entries()
+            results = []
+            for entry in entries_list:
+                if query.lower() in entry.lower():
+                    results.append(entry)
+            return render(request, 'encyclopedia/search.html', {
+                "results": results
+            })
