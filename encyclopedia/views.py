@@ -1,5 +1,8 @@
-from django.shortcuts import render
+from django import forms
+from django.urls import reverse
+from django.shortcuts import redirect, render
 from markdown2 import Markdown
+
 from . import util
 
 def md_to_html_converter(title):
@@ -45,6 +48,23 @@ def search(request):
             return render(request, 'encyclopedia/search.html', {
                 "results": results
             })
-        
+
 def add(request):
-    return render(request, "encyclopedia/add.html")
+    if request.method == "GET":        
+        return render(request, "encyclopedia/add.html")
+    else: 
+        title = request.POST['entry_title']
+        content = request.POST['entry_content']
+        duplicated_entry = md_to_html_converter(title)
+        if duplicated_entry is not None:
+            return render(request, 'encyclopedia/error.html', {
+                "error_message": "Encyclopedia already exists."
+            })
+        else:
+            util.save_entry(title, content)
+            new_entry = md_to_html_converter(title)
+            print(new_entry)
+            return render(request, 'encyclopedia/entry.html', {
+                "title": title, "content": new_entry
+            })
+
