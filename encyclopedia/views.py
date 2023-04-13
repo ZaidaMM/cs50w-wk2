@@ -63,8 +63,22 @@ def add(request):
         else:
             util.save_entry(title, content)
             new_entry = md_to_html_converter(title)
-            print(new_entry)
             return render(request, 'encyclopedia/entry.html', {
                 "title": title, "content": new_entry
             })
 
+def edit(request):
+    if request.method == "POST":
+        title = request.POST['entry_title']
+        content = util.get_entry(title) 
+        return render(request, "encyclopedia/edit.html", {"title":title, "content": content})
+    
+def saved(request):
+    if request.method == "POST": 
+        title = request.POST['edit_title']
+        content = request.POST['edit_content']
+        util.save_entry(title, content)
+        new_entry = md_to_html_converter(title)
+        return render(request, 'encyclopedia/entry.html', {
+            "title": title, "content": new_entry
+        })
