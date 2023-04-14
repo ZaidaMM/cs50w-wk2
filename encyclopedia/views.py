@@ -105,25 +105,6 @@ def add(request):
 #                 "title": title, "content": new_entry
 #             })
 
-
-# def edit(request): 
-    # if request.method == "GET":
-    #     return render(request, "encyclopedia/edit.html", {
-    #         "edit_form": EditEntryForm()
-    #     })
-    # if request.method == "POST":
-    #     edit_form = NewEntryForm(request.POST)
-    #     if edit_form.is_valid():
-    #         title = edit_form.cleaned_data["title"]
-    #         content = edit_form.cleaned_data["content"]
-    #         title = request.POST["entry_title"]
-    #         content = util.get_entry(title)
-    #         return render(request, 'encyclopedia/edit.html',    {
-    #             "title": title,
-    #             "content": content
-    #         })
-
-# TO CREATE EDIT FORM IN HTML:
 def edit(request):
     if request.method == "POST":
         title = request.POST['entry_title']
