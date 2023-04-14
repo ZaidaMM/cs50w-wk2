@@ -1,4 +1,5 @@
 from django import forms
+import random
 from django.urls import reverse
 from django.shortcuts import redirect, render
 from markdown2 import Markdown
@@ -82,3 +83,11 @@ def saved(request):
         return render(request, 'encyclopedia/entry.html', {
             "title": title, "content": new_entry
         })
+    
+def random_choice(request):
+    entries = util.list_entries()
+    random_title = random.choice(entries)
+    entry = md_to_html_converter(random_title)
+    return render(request, "encyclopedia/entry.html", {
+        "title":random_title, "content":entry
+    })
