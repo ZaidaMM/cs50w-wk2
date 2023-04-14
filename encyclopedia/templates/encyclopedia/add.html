@@ -1,9 +1,25 @@
 {% extends "encyclopedia/layout.html" %} {% block title %} Add New Entry
 {%endblock %} {% block body %}
 
-<div class="col ml-2">
-  <h1>Add New Encyclopedia</h1>
-  <form class="col-10 ml-2" action="{% url 'add' %}" method="post">
+<div class="row">
+  <div class="col">
+    <h2>Add New Encyclopedia</h2>
+    <form action="{% url 'add' %}" method="POST" class="form">
+      {% csrf_token %} {% for field in add_form %}
+      <div class="field">
+        <label for="{{field.id_for_label}}" class="label col-2 form-text"
+          >{{field.field_name}}</label
+        >
+        {{field}}
+      </div>
+      {% endfor %}
+      <input type="submit" class="mt-2" />
+    </form>
+  </div>
+</div>
+
+<!-- Creating the form in HTML: -->
+<!-- <form class="col-10 ml-2" action="{% url 'add' %}" method="post">
     {% csrf_token %}
     <label for="entry_title" class="form-label">Encyclopedia Title </label>
     <input class="form-control mb-4" name="entry_title" type="text" />
@@ -15,6 +31,6 @@
       rows="10"
     ></textarea>
     <input type="submit" />
-  </form>
-</div>
+  </form> -->
+
 {% endblock %}

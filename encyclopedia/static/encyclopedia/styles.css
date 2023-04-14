@@ -12,10 +12,10 @@ h1 {
   padding-top: 20px;
 }
 
-/* textarea {
+textarea {
   height: 90vh;
   width: 80%;
-} */
+}
 
 .main {
   padding: 10px;
@@ -35,4 +35,11 @@ h1 {
 
 .sidebar h2 {
   margin-top: 5px;
+}
+
+.centered {
+  margin: auto;
+  max-width: 300px;
+  height: 100vh;
+  padding-top: 20%;
 }

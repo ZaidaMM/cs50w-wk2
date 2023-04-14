@@ -6,6 +6,18 @@ from markdown2 import Markdown
 
 from . import util
 
+# New entry form class
+class NewEntryForm(forms.Form):
+    title = forms.CharField(label="New Encyclopedia", widget=forms.TextInput(attrs={'placeholder': 'Title', "class": 'form-control'}))
+    content = forms.CharField(widget=forms.Textarea(attrs={"cols":10, "rows":10, "padding":20, "placeholder": "Enter Markdown Content", "class": 'form-control'}), label="Markdown Content:")
+
+# Edit entry form class
+class EditEntryForm(forms.Form):
+    title = forms.CharField(label="Edit Encyclopedia", widget=forms.TextInput(attrs={"class": 'form-control'}))
+    content = forms.CharField(widget=forms.Textarea(attrs={"cols":10, "rows":10, "padding":20, "class": 'form-control'}), label="Edit Markdown Content:")
+# #######
+
+
 def md_to_html_converter(title):
     md_to_convert = util.get_entry(title)
     markdowner = Markdown()
@@ -50,24 +62,68 @@ def search(request):
                 "results": results
             })
 
+# Create form
+
 def add(request):
-    if request.method == "GET":        
-        return render(request, "encyclopedia/add.html")
-    else: 
-        title = request.POST['entry_title']
-        content = request.POST['entry_content']
-        duplicated_entry = md_to_html_converter(title)
-        if duplicated_entry is not None:
-            return render(request, 'encyclopedia/error.html', {
-                "error_message": "Encyclopedia already exists."
-            })
-        else:
+    if request.method == "GET":
+        return render(request, "encyclopedia/add.html", {
+            "add_form": NewEntryForm()
+        })
+    elif request.method == "POST":
+        add_form = NewEntryForm(request.POST)
+        if add_form.is_valid():
+            title = add_form.cleaned_data["title"]
+            content = add_form.cleaned_data["content"]
             util.save_entry(title, content)
             new_entry = md_to_html_converter(title)
-            return render(request, 'encyclopedia/entry.html', {
-                "title": title, "content": new_entry
+            return render(request, "encyclopedia/entry.html", {
+                "title": title,
+                "content": new_entry
             })
+    else:
+        return render(request, 'encyclopedia/error.html', {
+                "error_message": "Encyclopedia already exists."
+        })
 
+
+# TO CREATE FORM IN HTML:
+# def add(request):
+#     if request.method == "GET":        
+#         return render(request, "encyclopedia/add.html")
+#     else: 
+#         title = request.POST['entry_title']
+#         content = request.POST['entry_content']
+#         duplicated_entry = md_to_html_converter(title)
+#         if duplicated_entry is not None:
+#             return render(request, 'encyclopedia/error.html', {
+#                 "error_message": "Encyclopedia already exists."
+#             })
+#         else:
+#             util.save_entry(title, content)
+#             new_entry = md_to_html_converter(title)
+#             return render(request, 'encyclopedia/entry.html', {
+#                 "title": title, "content": new_entry
+#             })
+
+
+# def edit(request): 
+    # if request.method == "GET":
+    #     return render(request, "encyclopedia/edit.html", {
+    #         "edit_form": EditEntryForm()
+    #     })
+    # if request.method == "POST":
+    #     edit_form = NewEntryForm(request.POST)
+    #     if edit_form.is_valid():
+    #         title = edit_form.cleaned_data["title"]
+    #         content = edit_form.cleaned_data["content"]
+    #         title = request.POST["entry_title"]
+    #         content = util.get_entry(title)
+    #         return render(request, 'encyclopedia/edit.html',    {
+    #             "title": title,
+    #             "content": content
+    #         })
+
+# TO CREATE EDIT FORM IN HTML:
 def edit(request):
     if request.method == "POST":
         title = request.POST['entry_title']
