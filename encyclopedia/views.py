@@ -74,16 +74,22 @@ def add(request):
         if add_form.is_valid():
             title = add_form.cleaned_data["title"]
             content = add_form.cleaned_data["content"]
-            util.save_entry(title, content)
-            new_entry = md_to_html_converter(title)
-            return render(request, "encyclopedia/entry.html", {
-                "title": title,
-                "content": new_entry
-            })
-    else:
-        return render(request, 'encyclopedia/error.html', {
-                "error_message": "Encyclopedia already exists."
-        })
+            duplicated_entry = md_to_html_converter(title)
+            if duplicated_entry is not None:
+                return render(request, "encyclopedia/error.html", {
+                    "error_message": "Encyclopedia already exists."
+                })
+            else:
+                util.save_entry(title, content)
+                new_entry = md_to_html_converter(title)
+                return render(request, "encyclopedia/entry.html", {
+                    "title": title,
+                    "content": new_entry
+                })
+    # else:
+    #     return render(request, 'encyclopedia/error.html', {
+    #             "error_message": "Encyclopedia already exists."
+    #     })
 
 def edit(request):
     if request.method == "POST":
