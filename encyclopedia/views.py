@@ -86,10 +86,6 @@ def add(request):
                     "title": title,
                     "content": new_entry
                 })
-    # else:
-    #     return render(request, 'encyclopedia/error.html', {
-    #             "error_message": "Encyclopedia already exists."
-    #     })
 
 def edit(request):
     if request.method == "POST":
